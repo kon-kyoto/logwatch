@@ -18,14 +18,14 @@ def test_journal_reader():
     err_sum += test_matchLogs(test_logs) 
 
     if err_sum == 0:
-        print("{{SUCCSESS}} daemon is READY")
+        print("{{SUCCESS}} daemon is READY")
     else:
         pass
 
 def test_parseLogs():
     try:
         result = parseLogs()
-        print("{{SUCCSESS}} parseLogs is READY")
+        print("{{SUCCESS}} parseLogs is READY")
 
         return 0
 
@@ -35,14 +35,14 @@ def test_parseLogs():
         elif "Parse error" in str(e):
             print("[ERROR] Parse error")
         else:
-            pytest.fail(f"[ERROR] {e.value}")
+            pytest.fail(f"[ERROR] {str(e)}")
 
         return 1
 
 def test_matchLogs(logs):
     try:
         matchLogs(logs)
-        print("{{SUCCSESS}} matchLogs is READY")
+        print("{{SUCCESS}} matchLogs is READY")
         
         return 0
 
@@ -52,7 +52,7 @@ def test_matchLogs(logs):
         elif "Invalid YAML" in str(e):
             print("[ERROR] Invalid yaml pls check config")
         else:
-            print(f"[ERROR] {e.value}")
+            print(f"[ERROR] {str(e)}")
 
         return 1
 
