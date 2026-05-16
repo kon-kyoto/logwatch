@@ -1,4 +1,4 @@
-.PHONY: build rebuild journal_reader clean
+.PHONY: run build rebuild journal_reader clean
 
 dist = ./
 src_to_reader = src/journal_reader.py
@@ -12,6 +12,9 @@ journal_reader:
 	poetry run pyinstaller --onefile --name journal_reader --distpath $(dist) --workpath build --specpath build $(src_to_reader)
 	rm -rf build *.spec
 	@echo "End building"
+
+run: 
+	poetry run python src/journal_reader.py
 
 test: test_journal_reader
 
