@@ -1,13 +1,18 @@
 import subprocess
 
 def main():
-    result = subprocess.run(
-        'journalctl -n 50 | cat',
-        shell=True,
-        capture_output=True,
-        text=True
-    )
-    print(result.stdout)
+    try:
+        result = subprocess.run(
+            'journalctl -n 50 | cat',
+            shell=True,
+            capture_output=True,
+            text=True
+        )
+        return result.stdout, False # result and isError flag
+    except Exception as e:
+        return str(e), True
 
 if __name__ == "__main__":
-    main()
+    res, isError = main()
+    if (!isError):
+        print(res)
