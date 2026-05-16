@@ -1,5 +1,7 @@
 rules:
-  - pattern: "Failed password for (.*) from (.*)"
-    severity: HIGH
-  - pattern: "Accepted password for (.*) from (.*)"
-    severity: INFO
+  - pattern: "^(\\w+ \\d+ \\d+:\\d+:\\d+) \\S+ \\S+\\[\\d+\\]: FAILED LOGIN \\d+ FROM (\\S+) FOR (\\w+), Authentication failure"
+    severity: "[HIGH] Authentication failure"
+    fields:
+      - datetime
+      - from
+      - user
