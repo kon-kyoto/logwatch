@@ -33,12 +33,19 @@ def matchLogs(logs):
         raise Exception(f"Config not found: {config}")
     except yaml.YAMLError as e:
         raise Exception(f"Invalid YAML: {e}")
+    except KeyError as e:
+        raise Exception(f"Missing key in config: {e}")
     
     for line in logs.strip().split('\n'):
         for rule in rules:
-            if re.search(rule['pattern'], line):
-                result += f"{rule['severity']}\n"
-                result += f"\t{line}\n"
+            try:
+                if re.search(rule['pattern'], line):
+                    result += f"{rule['severity']}\n"
+                    result += f"\t{line}\n"
+            except KeyError as e:
+                raise Exception(f"Rule missing required key: {e}")
+            except re.error as e:
+                raise Exception(f"Invalid regex pattern: {e}")
 
     return result
 
