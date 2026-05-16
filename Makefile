@@ -19,4 +19,4 @@ test_journal_reader:
 	poetry run python test/journal_reader_test.py
 
 clean:
-	rm -rf journal_reader
+	rm -rf build journal_reader *.spec
