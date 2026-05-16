@@ -4,13 +4,7 @@ import re
 
 def main():
     try:
-        logs = subprocess.run(
-            'journalctl -n 200 | cat',
-            shell=True,
-            capture_output=True,
-            text=True
-        )
-
+        logs = parseLogs()
         result, isError = matchLogs(logs.stdout)
 
         if (isError): raise result
@@ -18,6 +12,21 @@ def main():
         return result, False # logs and isError flag
     except Exception as e:
         return str(e), True
+
+def parseLogs():
+    try:
+        logs = subprocess.run(
+            'journalctl -n 200 | cat',
+            shell=True,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        return logs
+    except subprocess.CalledProcessError as e:
+        raise Exception(f"Journal failed: {e}")
+    except Exception as e:
+        raise Exception(f"Parse error: {e}")
 
 def matchLogs(logs):
     config = "config/config.yaml"
