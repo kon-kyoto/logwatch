@@ -14,5 +14,5 @@ def main():
 
 if __name__ == "__main__":
     res, isError = main()
-    if (!isError):
+    if (not isError):
         print(res)
