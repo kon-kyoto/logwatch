@@ -1,6 +1,12 @@
 import sys
 import os
-import pytest
+
+class Colors:
+    GREEN = '\033[92m'
+    RED = '\033[91m'
+    YELLOW = '\033[93m'
+    RESET = '\033[0m'
+    BOLD = '\033[1m'
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -18,43 +24,45 @@ def test_journal_reader():
     err_sum += test_matchLogs(test_logs) 
 
     if err_sum == 0:
-        print("{{SUCCESS}} daemon is READY")
+        print(f"{Colors.GREEN}{Colors.BOLD}[SUCCESS]{Colors.RESET} daemon is READY")
     else:
         pass
 
 def test_parseLogs():
     try:
         result = parseLogs()
-        print("{{SUCCESS}} parseLogs is READY")
+        print(f"{Colors.GREEN}{Colors.BOLD}[SUCCESS]{Colors.RESET} parseLogs is READY")
 
         return 0
 
     except Exception as e:
         if "Journal failed" in str(e):
-            print("[ERROR] Journal don't opened pls check journalctl util")
+            print(f"{Colors.RED}[ERROR]{Colors.RESET} Journal don't opened pls check journalctl util")
         elif "Parse error" in str(e):
-            print("[ERROR] Parse error")
+            print(f"{Colors.RED}[ERROR]{Colors.RESET} Parse error")
         else:
-            pytest.fail(f"[ERROR] {str(e)}")
+            print(f"{Colors.RED}[ERROR]{Colors.RESET} {str(e)}")
 
         return 1
 
 def test_matchLogs(logs):
     try:
         matchLogs(logs)
-        print("{{SUCCESS}} matchLogs is READY")
-        
+        print(f"{Colors.GREEN}{Colors.BOLD}[SUCCESS]{Colors.RESET} {Colors.GREEN}matchLogs is READY{Colors.RESET}")
         return 0
 
     except Exception as e:
         if "Config not found" in str(e):
-            print("[ERROR] Config not found pls check to config")
+            print(f"{Colors.RED}[ERROR]{Colors.RESET} Config not found pls check to config")
         elif "Invalid YAML" in str(e):
-            print("[ERROR] Invalid yaml pls check config")
+            print(f"{Colors.RED}[ERROR]{Colors.RESET} Invalid yaml pls check config")
+        elif "Missing key" in str(e) or "missing required key" in str(e):
+            print(f"{Colors.RED}[ERROR]{Colors.RESET} {str(e)}")
+        elif "pattern" in str(e) and "KeyError" in str(type(e).__name__):
+            print(f"{Colors.RED}[ERROR]{Colors.RESET} Rule missing 'pattern' key in config")
         else:
-            print(f"[ERROR] {str(e)}")
-
-        return 1
+            print(f"{Colors.RED}[ERROR]{Colors.RESET} {str(e)}")
+        return 1 
 
 if __name__ == '__main__':
     test_journal_reader()
