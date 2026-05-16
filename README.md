@@ -22,8 +22,17 @@ pip install pyinstaller
 ```
 ### Сборка/разборка
 ```bash
+# Сборка ультилиты полностью
 make build
+make rebuild
 
+# Индивидуальная сборка
+make journal_reader
+
+# Тесты Сэр
+make test
+
+# Почистить все
 make clean
 ```
 
