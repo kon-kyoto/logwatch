@@ -3,15 +3,9 @@ import yaml
 import re
 
 def main():
-    try:
-        logs = parseLogs()
-        result, isError = matchLogs(logs.stdout)
-
-        if (isError): raise result
-
-        return result, False # logs and isError flag
-    except Exception as e:
-        return str(e), True
+    logs = parseLogs()
+    result = matchLogs(logs.stdout)
+    return result
 
 def parseLogs():
     try:
@@ -35,22 +29,19 @@ def matchLogs(logs):
     try:
         with open(config, 'r') as f:
             rules = yaml.safe_load(f)['rules']
+    except FileNotFoundError:
+        raise Exception(f"Config not found: {config}")
+    except yaml.YAMLError as e:
+        raise Exception(f"Invalid YAML: {e}")
+    
+    for line in logs.strip().split('\n'):
+        for rule in rules:
+            if re.search(rule['pattern'], line):
+                result += f"{rule['severity']}\n"
+                result += f"\t{line}\n"
 
-        for line in logs.strip().split('\n'):
-            for rule in rules:
-                if re.search(rule['pattern'], line):
-                    result += f"{rule['severity']}\n"
-                    result += f"\t{line}\n"
-
-        return result, False
-
-    except Exception as e:
-        return e, True
-
+    return result
 
 if __name__ == "__main__":
-    res, isError = main()
-    if (isError):
-        print("I got some error!!!!\nPLS check `make test`")
-    else:
-        print(res)
+    res = main()
+    print(res)
