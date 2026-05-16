@@ -1,0 +1,5 @@
+rules:
+  - pattern: "Failed password for (.*) from (.*)"
+    severity: HIGH
+  - pattern: "Accepted password for (.*) from (.*)"
+    severity: INFO
