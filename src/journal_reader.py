@@ -43,5 +43,8 @@ def matchLogs(logs):
     return result
 
 if __name__ == "__main__":
-    res = main()
-    print(res)
+    try:
+        res = main()
+        print(res)
+    except Exception as e:
+        print(f"\n\nI got some error!!!!\nPLS check `make test`\n\n")
